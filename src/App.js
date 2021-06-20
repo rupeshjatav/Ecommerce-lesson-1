@@ -28,10 +28,23 @@ import { auth } from "./firebase/firebase.utils";
 //     </div>
 //   )
 // }
+
+// lifecycle methods Mounting,Updating,Unmounting
+// For Mounting
+// 1st constructor() method is called  
+// 2nd render() method is called
+// 3rd componentDidMount() is called ---> its called after the components are render 
+
+// For Updating
+// 1st render() method is called  
+// 2nd componentDidUpdate() method is called --> its called when the states are changed 
+
+// For Unmounting
+// 1st componentWillUnmount() method is called when the component is about to be deleted from react dom  
+
 class App extends React.Component {
   constructor() {
-    super();
-
+    super();//it inerits the properties
     this.state = {
       'currentUser': null
     }
@@ -49,19 +62,39 @@ class App extends React.Component {
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuth();//closing the subscribe
+    this.unsubscribeFromAuth(); //closing the subscribe
   }
 
   render() {
     return (
       <div>
-        <Header />
+        <Header currentUser={this.state.currentUser} />
+        {/*components will render at same page to avoid this we use Switch */}
         <Switch>
+          {/* Route is used to give url path, it has attributes path and exact  */}
+          {/* path helps to give url  */}
+          {/* exact ---> if the path matches exactly then only the component will render  */}
+          {/* example 
+             here we have to mention the exact otherwise for path='about/name' it matches with path="/about"
+             so in order to distinguish or it should not rendered at same page as both paths are different we use exact attribute
+             exact path='/about' if matches then only the component will render otherwise not.  
+              <Route exact path='/about' component={HomePage} />
+              <Route path='about/name' component={Shoppage} />      
+          */}
           <Route exact path='/' component={HomePage} />
           <Route path='/shop' component={Shoppage} />
-          <Route path='/sign' component={SignInAndSignUp} />
+          <Route path='/signin' component={SignInAndSignUp} />
         </Switch>
       </div>
+
+      // as we have used div element to render all components inside it but the disadvantage is it adds 
+      // a new layer to our page 
+      //**To avoid this  we use React.Fragment or <>< which helps to render multi jsx components without adding div*/
+      //**EXAMPLE*/
+      // <>
+      // <About>
+      // <Contact>
+      // </>
     );
   }
 }
